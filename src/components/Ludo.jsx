@@ -1,6 +1,6 @@
-import { render } from '@testing-library/react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import React from 'react'
+import axios from 'axios'
 
 const classId = [
     ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "010", "011", "012", "013", "014"],
@@ -26,7 +26,7 @@ const RenderBlock = ({block, i, j}) => (
         {block.length > 0 &&
             block.map(b => (
                 <div className={`${b}`}>
-                    
+                    <button onClick={""}></button>
                 </div>
             ))
         }
@@ -49,15 +49,22 @@ const RenderBoard = ({board, i}) => (
     
 )
 function Board() {
-    
-    const file = require('../fakeData/ludo.json')
 
-    const [initialBoard, setInitialState] = useState(file.type.newboard.board)
-    
+    const [initialBoard, setInitialState] = useState(null)
+
+    useEffect(() => {
+        axios.get("/board")
+            .then(res => setInitialState(res.data.type.newboard.board))
+    })
     let i = 0
+    if (initialBoard){
     return(
         <RenderBoard board={initialBoard} i={i}/>
-    )
+    )}else{
+        return (
+            "a"
+        )
+    }
 }
 
 export default Board;

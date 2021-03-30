@@ -260,3 +260,7 @@ $RECYCLE.BIN/
 # .pnp.*
 
 # End of https://www.toptal.com/developers/gitignore/api/react,vscode,macos,windows,linux,node,yarn
+
+#my change
+/src/temp.js
+/src/fakeData/*

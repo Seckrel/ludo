@@ -21,12 +21,22 @@ const classId = [
 ]
 
 
+// const onSpriteClick = (x, y, color) => {
+//     const data = {
+//         x: x,
+//         y: y,
+//         color: color
+//     }
+//     axios.post('/click', data)
+//         .then(res)
+// }
+
 const RenderBlock = ({block, i, j}) => (
     <div key={i} className={`cell${classId[i][j]}`}>
         {block.length > 0 &&
             block.map(b => (
-                <div className={`${b}`}>
-                    <button onClick={""}></button>
+                <div className={`${b}`} onClick={''}>
+                    
                 </div>
             ))
         }
@@ -59,7 +69,7 @@ function Board() {
     let i = 0
     if (initialBoard){
     return(
-        <RenderBoard board={initialBoard} i={i}/>
+        <RenderBoard board={initialBoard} i={i} />
     )}else{
         return (
             "a"

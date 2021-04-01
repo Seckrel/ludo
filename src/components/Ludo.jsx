@@ -21,7 +21,7 @@ const classId = [
 ]
 
 
-const onSpriteClick = (x, y, color, setState) => {
+const onSpriteClick = (x, y, color, setState, dice) => {
     const data = {
         x: x,
         y: y,
@@ -30,15 +30,16 @@ const onSpriteClick = (x, y, color, setState) => {
     axios.post('/click', data)
         .then(res => {
             setState(res.data.type.newboard.board)
+            dice(res.data.dice)
         })
         .catch(e => console.log(e))
 }
 
-const RenderBlock = ({block, i, j, setState}) => (
+const RenderBlock = ({block, i, j, setState, dice}) => (
     <div key={i} className={`cell${classId[i][j]}`}>
         {block.length > 0 &&
             block.map(b => (
-                <div className={`${b}`} onClick={() => onSpriteClick(i, j, b, setState)}>
+                <div className={`${b}`} onClick={() => onSpriteClick(i, j, b, setState, dice)}>
                     
                 </div>
             ))
@@ -46,18 +47,18 @@ const RenderBlock = ({block, i, j, setState}) => (
     </div>
 )
 
-const RenderRows = ({rows, i, j, setState}) => (
+const RenderRows = ({rows, i, j, setState, dice}) => (
     <div>
         {rows.map((block) => (
-        <RenderBlock block={block} i={i} j={j++} setState={setState}/>
+        <RenderBlock block={block} i={i} j={j++} setState={setState} dice={dice}/>
     ))}
     </div>
 )
 
-const RenderBoard = ({board, i, setState}) => (
+const RenderBoard = ({board, i, setState, dice}) => (
     
     board.map((rows) => (
-        <RenderRows rows={rows} i={i++} j={0} setState={setState}/>
+        <RenderRows rows={rows} i={i++} j={0} setState={setState} dice={dice}/>
     ))
     
 )
@@ -79,7 +80,7 @@ function Board() {
     if (initialBoard){
     return(
         <React.Fragment>
-            <RenderBoard board={initialBoard} i={i}  setState={setInitialState}/>
+            <RenderBoard board={initialBoard} i={i}  setState={setInitialState} dice={setDice}/>
             <div className={"dice"}>
                 {dice}
             </div>

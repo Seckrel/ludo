@@ -20,6 +20,10 @@ const classId = [
     ["140", "141", "142", "143", "144", "145", "146", "147", "148", "149", "1410", "1411", "1412", "1413", "1414"]        
 ]
 
+const turns = ["Red", "Green", "Yellow", "Blue"]
+let turnPos = 0
+let currentTurn = `It's ${turns[turnPos]} turn.`
+
 
 const onSpriteClick = (x, y, color, setState, dice) => {
     const data = {
@@ -27,6 +31,12 @@ const onSpriteClick = (x, y, color, setState, dice) => {
         y: y,
         color: color
     }
+    if (turns[turnPos].toLowerCase()!==color){
+        currentTurn = `Sorry, it's still ${turns[turnPos]} turn.`
+        return
+    }
+    turnPos = (turnPos + 1) % 4
+    currentTurn = `It's ${turns[turnPos]} turn.`
     axios.post('/click', data)
         .then(res => {
             setState(res.data.type.newboard.board)
@@ -68,6 +78,7 @@ function Board() {
 
     const [initialBoard, setInitialState] = useState(null)
     const [dice, setDice] = useState(0)
+    
     // console.table(initialBoard)
     useEffect(() => {
         axios.get("/board")
@@ -76,6 +87,8 @@ function Board() {
                 setInitialState(res.data.type.newboard.board)
             })
     },[])
+
+    
     let i = 0
     if (initialBoard){
     return(
@@ -83,6 +96,9 @@ function Board() {
             <RenderBoard board={initialBoard} i={i}  setState={setInitialState} dice={setDice}/>
             <div className={"dice"}>
                 {dice}
+            </div>
+            <div className={"text_box"}>
+                {currentTurn}
             </div>
         </React.Fragment>
     )}else{

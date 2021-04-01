@@ -529,7 +529,7 @@ div.cell88 {
 }
 
 div.cell77 {
- /* background-image: url(center.png); */
+ background-image: url(center.png);
  background-size: contain;
  background-repeat: no-repeat;
 }
@@ -649,5 +649,5 @@ div.text_box {
 
 div.text_box:before {
  color: gray;
- content: "[Message from Server]";
+ /* content: "[Message from Server]"; */
 }

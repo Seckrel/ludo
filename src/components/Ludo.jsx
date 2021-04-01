@@ -21,21 +21,24 @@ const classId = [
 ]
 
 
-// const onSpriteClick = (x, y, color) => {
-//     const data = {
-//         x: x,
-//         y: y,
-//         color: color
-//     }
-//     axios.post('/click', data)
-//         .then(res)
-// }
+const onSpriteClick = (x, y, color, setState) => {
+    const data = {
+        x: x,
+        y: y,
+        color: color
+    }
+    axios.post('/click', data)
+        .then(res => {
+            setState(res.data.type.newboard.board)
+        })
+        .catch(e => console.log(e))
+}
 
-const RenderBlock = ({block, i, j}) => (
+const RenderBlock = ({block, i, j, setState}) => (
     <div key={i} className={`cell${classId[i][j]}`}>
         {block.length > 0 &&
             block.map(b => (
-                <div className={`${b}`} onClick={''}>
+                <div className={`${b}`} onClick={() => onSpriteClick(i, j, b, setState)}>
                     
                 </div>
             ))
@@ -43,33 +46,44 @@ const RenderBlock = ({block, i, j}) => (
     </div>
 )
 
-const RenderRows = ({rows, i, j}) => (
+const RenderRows = ({rows, i, j, setState}) => (
     <div>
         {rows.map((block) => (
-        <RenderBlock block={block} i={i} j={j++}/>
+        <RenderBlock block={block} i={i} j={j++} setState={setState}/>
     ))}
     </div>
 )
 
-const RenderBoard = ({board, i}) => (
+const RenderBoard = ({board, i, setState}) => (
     
     board.map((rows) => (
-        <RenderRows rows={rows} i={i++} j={0}/>
+        <RenderRows rows={rows} i={i++} j={0} setState={setState}/>
     ))
     
 )
+
+
 function Board() {
 
     const [initialBoard, setInitialState] = useState(null)
-
+    const [dice, setDice] = useState(0)
+    // console.table(initialBoard)
     useEffect(() => {
         axios.get("/board")
-            .then(res => setInitialState(res.data.type.newboard.board))
-    })
+            .then(res =>{
+                setDice(res.data.dice)
+                setInitialState(res.data.type.newboard.board)
+            })
+    },[])
     let i = 0
     if (initialBoard){
     return(
-        <RenderBoard board={initialBoard} i={i} />
+        <React.Fragment>
+            <RenderBoard board={initialBoard} i={i}  setState={setInitialState}/>
+            <div className={"dice"}>
+                {dice}
+            </div>
+        </React.Fragment>
     )}else{
         return (
             "a"

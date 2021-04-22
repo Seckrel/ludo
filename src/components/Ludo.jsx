@@ -79,7 +79,6 @@ function Board() {
     const [initialBoard, setInitialState] = useState(null)
     const [dice, setDice] = useState(0)
     
-    // console.table(initialBoard)
     useEffect(() => {
         axios.get("/board")
             .then(res =>{
@@ -103,7 +102,7 @@ function Board() {
         </React.Fragment>
     )}else{
         return (
-            "a"
+            "Something went wrong"
         )
     }
 }
